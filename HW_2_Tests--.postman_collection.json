@@ -1,0 +1,212 @@
+{
+	"info": {
+		"_postman_id": "017bbe54-27fd-4c80-9ff2-98bb45f08f9a",
+		"name": "HW_2_Tests**",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "20771737"
+	},
+	"item": [
+		{
+			"name": "object_info_4",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"// * Преобразовать пункты 12-13-14 (salary из реквеста и респонса равны) таким образом, чтобы проверка производилась циклом, в котором будет всего ОДИН тест. Имя теста должно меняться в зависимости от значения в Salary\r",
+							"\r",
+							"const response = pm.response.json()\r",
+							"const req = pm.request.url.query.toObject()\r",
+							"response.salary.forEach((salary, index) => {\r",
+							"    pm.test(`${req.salary} * ${index + 1} == ${salary}`, () => {\r",
+							"        pm.expect(+req.salary *(index + 1)).to.eql(+salary)\r",
+							"    })\r",
+							"})"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://162.55.220.72:5005/object_info_4?name={{name}}&age={{age}}&salary={{salary}}",
+					"protocol": "http",
+					"host": [
+						"162",
+						"55",
+						"220",
+						"72"
+					],
+					"port": "5005",
+					"path": [
+						"object_info_4"
+					],
+					"query": [
+						{
+							"key": "name",
+							"value": "{{name}}"
+						},
+						{
+							"key": "age",
+							"value": "{{age}}"
+						},
+						{
+							"key": "salary",
+							"value": "{{salary}}"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "object_info_3",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"//  Преобразовать задания 5-7 (сравнить идентичные поля в реквесте и респонсе) таким образом, чтобы это делалось ЗА ОДИН ТЕСТ (сразу все 3 поля) БЕЗ ЦИКЛОВ! (глубокое сравнение объектов)\r",
+							"\r",
+							"const req = pm.request.url.query.toObject()\r",
+							"const response = pm.response.json()\r",
+							"const respObj = {}\r",
+							"for (const key in req){\r",
+							"    respObj[key] = isNaN(response[key]) ? response[key] : +response[key]\r",
+							"    req[key] = isNaN(req[key]) ? req[key] : +req[key]\r",
+							"}\r",
+							"pm.test(\"Keys is compared\", () => {\r",
+							"    pm.expect(req).to.deep.eql(respObj)\r",
+							"})"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://162.55.220.72:5005/object_info_3?name={{name}}&age={{age}}&salary={{salary}}",
+					"protocol": "http",
+					"host": [
+						"162",
+						"55",
+						"220",
+						"72"
+					],
+					"port": "5005",
+					"path": [
+						"object_info_3"
+					],
+					"query": [
+						{
+							"key": "name",
+							"value": "{{name}}"
+						},
+						{
+							"key": "age",
+							"value": "{{age}}"
+						},
+						{
+							"key": "salary",
+							"value": "{{salary}}"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "user_info_2",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"// 1)  Преобразовать задания 8 - 13 (проверить что в json имеется нужный параметр) таким образом, чтобы все проверки делались в цикле (1 проверка в цикле, в которую попадают нужные параметры). Название теста должно видоизменяться исходя из подаваемых данных. ( ${}  или другим способом)\r",
+							"// 2) ** Преобразовать задания 14 - 18 (проверить что параметр равен salary умножить на коэффициент) таким образом, чтобы все проверки делались в цикле (1 проверка в цикле, в которую попадают нужные параметры). Название теста должно видоизменяться исходя из подаваемых данных. ( ${}  или другим способом)\r",
+							"// 3) *** Преобразовать описанные выше задания 1 и 2 для данного эндпоинта в ОДИН ЦИКЛ, в котором будут проходить ОБА теста.\r",
+							"\r",
+							"const jsonKeys = ['start_qa_salary','qa_salary_after_6_months','qa_salary_after_3.5_years','qa_salary_after_12_months','qa_salary_after_1.5_year','person']\r",
+							"const response = pm.response.json()\r",
+							"jsonKeys.forEach(key => {\r",
+							"    pm.test(`Response has ${key}`, () => {\r",
+							"        pm.expect(response).to.ownProperty(key)\r",
+							"    })\r",
+							"})\r",
+							"const salary = pm.environment.get(\"salary\")\r",
+							"const multFactor = {\r",
+							"    'start_qa_salary': 1,\r",
+							"    'qa_salary_after_6_months': 2,\r",
+							"    'qa_salary_after_3.5_years': 3.8,\r",
+							"    'qa_salary_after_12_months': 2.7,\r",
+							"    'qa_salary_after_1.5_year': 3.3\r",
+							"}\r",
+							"for (const key in multFactor){\r",
+							"pm.test(`Response ${key} == salary from request * ${multFactor[key]}`, () => {\r",
+							"    pm.expect(+response[key]).to.eql(salary * multFactor[key])\r",
+							"})\r",
+							"}\r",
+							"\r",
+							"multFactor.person = ''\r",
+							"for (const key in multFactor){\r",
+							"     pm.test(`Response has ${key}`, () => {\r",
+							"    pm.expect(response).to.ownProperty(key)\r",
+							"    })\r",
+							"    if(key != 'person'){\r",
+							"    pm.test(`Response ${key} == salary from request * ${multFactor[key]}`, () => {\r",
+							"    pm.expect(+response[key]).to.eql(salary * multFactor[key])\r",
+							"})\r",
+							"    }\r",
+							"}\r",
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "formdata",
+					"formdata": [
+						{
+							"key": "name",
+							"value": "{{name}}",
+							"type": "text"
+						},
+						{
+							"key": "age",
+							"value": "{{age}}",
+							"type": "text"
+						},
+						{
+							"key": "salary",
+							"value": "{{salary}}",
+							"type": "text"
+						}
+					]
+				},
+				"url": {
+					"raw": "http://162.55.220.72:5005/user_info_2",
+					"protocol": "http",
+					"host": [
+						"162",
+						"55",
+						"220",
+						"72"
+					],
+					"port": "5005",
+					"path": [
+						"user_info_2"
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}
