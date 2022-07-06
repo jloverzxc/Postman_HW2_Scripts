@@ -1,0 +1,106 @@
+{
+	"info": {
+		"_postman_id": "6921fd72-7f41-490a-aa86-0b0443bd7169",
+		"name": "HW_2_Tests_csv",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "20771737"
+	},
+	"item": [
+		{
+			"name": "user_info_2****",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"// Необходимо провести тестирование API данного эндпоинта на валидацию входных параметров. Суть задания: проверить валидации каждого поля, подаваемого в эндпоинт на возможные значения. Будем УСЛОВНО считать, что негативная проверка должна возвращать какой угодно статус НО НЕ 200! Ваша задача написать тест кейсы в постмане таким образом, что одна негативная проверка - один запрос, позитивные проверки можно объединять в 1. Ваша задача протестировать исходя из требований на все возможные аспекты. В каждом запросе тест ТОЛЬКО НА СТАТУС КОД (200 - позитивное значение, не 200 - негативное). \r",
+							"// P.S. ЗАДАНИЕ НЕ ПОДРАЗУМЕВАЕТ, ЧТО ЭНДПОИНТ РАБОТАЕТ СОГЛАСНО НАПИСАННЫМ ТРЕБОВАНИЯМ. МЫ УЧИМСЯ ПИСАТЬ ТЕСТЫ НА API!\r",
+							"// Требования:\r",
+							"// 1) Name: 3-40 символов включительно, запрещены префиксные и постфиксные пробелы. Поле обязательное\r",
+							"// 2) Age: только целые цифры в диапазоне 18-120 включительно. Поле обязательное\r",
+							"// 3) Salary: только целые цифры в диапазоне 1-1000000 включительно. Поле обязательное\r",
+							"\r",
+							"// 1****. Преобразовать задание 1 таким образом, чтобы вы отправляли параметры через CSV файл. У вас будет ровно 1 запрос в коллекции, который будет повторяться столько раз, сколько строк в CSV файле. Также должна быть написана функция в тестах, которая проверяет валидность входящих данных, и в зависимости от этого проверяет на статус 200 или НЕ 200.\r",
+							"\r",
+							"\r",
+							"let name = pm.iterationData.get(\"name\")\r",
+							"let age = pm.iterationData.get(\"age\")\r",
+							"let salary = pm.iterationData.get(\"salary\")\r",
+							"console.log(name, age, salary)\r",
+							"\r",
+							"const validName = () => {\r",
+							"    if(name.length >= 3 && name.length <= 40 && name != null && (name.trim().length === name.length)) return true\r",
+							"    else return false\r",
+							"}\r",
+							"\r",
+							"const validAge = () => {\r",
+							"    if(Number.isInteger(+age) && +age != null && +age >= 18 && +age <= 120) return true\r",
+							"    else return false\r",
+							"}\r",
+							"\r",
+							"const validSalary = () => {\r",
+							"    if(Number.isInteger(+salary) && +salary != null && +salary >= 1 && +salary <= 1000000) return true\r",
+							"    else return false\r",
+							"}\r",
+							"\r",
+							"const test = () => {\r",
+							"    if(validAge() === true && validName() === true && validSalary() === true){\r",
+							"        pm.test(\"Status code is 200\", () => {\r",
+							"            pm.response.to.have.status(200)\r",
+							"        })\r",
+							"    }\r",
+							"    else {\r",
+							"        pm.test(\"Status code is not 200\", () => {\r",
+							"            pm.response.to.not.have.status(200)\r",
+							"        })\r",
+							"    }\r",
+							"}\r",
+							"test()\r",
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "formdata",
+					"formdata": [
+						{
+							"key": "name",
+							"value": "{{name}}",
+							"type": "text"
+						},
+						{
+							"key": "age",
+							"value": "{{age}}",
+							"type": "text"
+						},
+						{
+							"key": "salary",
+							"value": "{{salary}}",
+							"type": "text"
+						}
+					]
+				},
+				"url": {
+					"raw": "http://162.55.220.72:5005/user_info_2",
+					"protocol": "http",
+					"host": [
+						"162",
+						"55",
+						"220",
+						"72"
+					],
+					"port": "5005",
+					"path": [
+						"user_info_2"
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}
